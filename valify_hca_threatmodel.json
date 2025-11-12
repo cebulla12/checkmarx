@@ -1,0 +1,74 @@
+{
+  "version": "2.0.0",
+  "summary": {
+    "title": "Valify – HCA Integration (Enhanced)",
+    "owner": "HCA Healthcare – ITG Security Consulting & Architecture",
+    "reviewer": "Security Architecture Review Board (ARB)",
+    "description": "Threat model for Valify purchased-services analytics platform integrated with HCA. Includes separate diagrams for (1) UI & Access, and (2) Data Ingestion & Analytics. HCA-specific controls (CCF-aligned) included.",
+    "threatModelType": "STRIDE",
+    "lastUpdated": "2025-11-12"
+  },
+  "detail": {
+    "contributors": ["Bret Cebulla"],
+    "diagrams": [
+      {
+        "id": "diagram-ui-access",
+        "title": "Diagram 1 – UI & Access (SSO, RBAC, Exports)",
+        "diagramType": "STRIDE",
+        "cells": [
+          {
+            "id": "b-hca",
+            "type": "tm.Boundary",
+            "position": { "x": 20, "y": 20 },
+            "size": { "width": 560, "height": 420 },
+            "labels": [ { "attrs": { "text": { "text": "HCA Network" } } } ],
+            "threats": []
+          },
+          {
+            "id": "b-cloud",
+            "type": "tm.Boundary",
+            "position": { "x": 620, "y": 20 },
+            "size": { "width": 540, "height": 420 },
+            "labels": [ { "attrs": { "text": { "text": "Valify Cloud (SaaS)" } } } ],
+            "threats": []
+          },
+          {
+            "id": "actor-user",
+            "type": "tm.Actor",
+            "position": { "x": 60, "y": 60 },
+            "size": { "width": 160, "height": 64 },
+            "labels": [ { "attrs": { "text": { "text": "HCA Supply Chain / Finance User" } } } ],
+            "threats": []
+          },
+          {
+            "id": "proc-entra",
+            "type": "tm.Process",
+            "position": { "x": 80, "y": 180 },
+            "size": { "width": 190, "height": 84 },
+            "labels": [ { "attrs": { "text": { "text": "HCA Entra ID (Azure AD) – SSO" } } } ],
+            "threats": [
+              {
+                "id": "t-entra-1",
+                "title": "MFA not enforced / SSO misconfig",
+                "type": "Spoofing",
+                "severity": "High",
+                "status": "Open",
+                "description": "If MFA absent or audience restrictions weak, attacker may authenticate.",
+                "mitigation": "HCA CCF IAM-1: Enforce MFA; signed assertions; audience/issuer checks; short token lifetimes; conditional access."
+              }
+            ]
+          },
+          {
+            "id": "proc-siem",
+            "type": "tm.Process",
+            "position": { "x": 320, "y": 320 },
+            "size": { "width": 190, "height": 84 },
+            "labels": [ { "attrs": { "text": { "text": "HCA SIEM / Splunk" } } } ],
+            "threats": [
+              {
+                "id": "t-siem-1",
+                "title": "Insufficient audit detail",
+                "type": "Repudiation",
+                "severity": "Medium",
+                "status": "Open",
+                "description": "Without immutable
